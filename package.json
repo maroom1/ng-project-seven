@@ -1,15 +1,11 @@
 {
   "name": "project-seven",
   "version": "0.0.0",
-  "main": "index.js",
   "homepage": "https://maroom1.github.io/ng-project-seven",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
     "deploy": "gh-pages -d dist"
   },
   
