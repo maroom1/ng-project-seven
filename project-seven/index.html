@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ProjectSeven</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-signin-scope" content="profile email">
+  <!-- url must be specified correctly http:localhost:4200 -->
+<meta name="google-signin-client_id" content="752624053566-h7as6mu6a5tk0e60c4f8k9904s5fbv89.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+</head>
+
+<script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      document.getElementById('status').className="alert alert-success";
+      document.getElementById('data').style.display = "block";
+      document.getElementById('iconstatus').className+="fab fa-facebook";
+
+      testAPI();
+    } else {
+      // The person is not logged into your app or we are unable to tell.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+        document.getElementById('status').className="alert alert-warning";
+        document.getElementById('data').style.display = "none";
+        clearData();
+
+
+       
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+function logout() {
+  FB.logout(function(response) {
+    statusChangeCallback(response);
+    });
+}
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1912313228855618',
+      cookie     : true,  // enable cookies to allow the server to access 
+                          // the session
+      xfbml      : true,  // parse social plugins on this page
+      version    : 'v2.8' // use graph api version 2.8
+    });
+
+    // Now that we've initialized the JavaScript SDK, we call 
+    // FB.getLoginStatus().  This function gets the state of the
+    // person visiting this page and can return one of three states to
+    // the callback you provide.  They can be:
+    //
+    // 1. Logged into your app ('connected')
+    // 2. Logged into Facebook, but not your app ('not_authorized')
+    // 3. Not logged into Facebook and can't tell if they are logged into
+    //    your app or not.
+    //
+    // These three cases are handled in the callback function.
+
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    console.log(d + 'document');
+    console.log(s+ 'script');
+    console.log(id+'id');
+    var js, fjs = d.getElementsByTagName(s)[0];
+    console.log('get element by '+d.getElementsByTagName(s)[0]);
+    console.log('js '+js);
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', {fields: 'name,email,last_name,first_name,about,birthday,picture,name_format,short_name'},function(response) {
+      console.log('Successful login for: ' + response.name);
+      console.log('Successful id for: ' + response.id);
+      console.log('last name :'+response.last_name);
+      console.log('middle name :'+response.middle_name);
+      console.log('email :'+response.email);
+      console.log('picture :'+response.picture['data'].url);
+      
+      console.log('url :'+response.picture.data.url);
+
+var img = response.picture.data.url;
+console.log('img '+img)
+
+      console.log('respone ' + response);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+        $('#img').attr('src',img);
+        // document.getElementById('image').src=img;
+        document.getElementById('name').textContent=response.name;
+        document.getElementById('sname').textContent=response.short_name;
+        document.getElementById('email').textContent=response.email;
+        document.getElementById('lname').textContent=response.last_name;
+        document.getElementById('fname').textContent=response.first_name;
+        document.getElementById('nameformat').textContent=response.name_format;
+        $('#url').attr("href",response.picture.data.url);
+        document.getElementById('signoutbtn').onclick=function() {logout();};
+
+
+        // document.getElementById('url').textContent=response.picture.data.url;
+    });
+  }
+</script>
+
+<!--
+  Below we include the Login Button social plugin. This button uses
+  the JavaScript SDK to present a graphical Login button that triggers
+  the FB.login() function when clicked.
+-->
+
+<div>
+  <app-root>Loading...</app-root>
+  <br>
+  <div id="loginbuttons" class="row">
+  <!-- <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+  </fb:login-button> -->
+  <div class="col-sm-4">
+  <div  class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" scope="public_profile,email" onlogin="checkLoginState();"></div>
+</div>
+<div class="col-sm-3">
+      <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    </div>
+</div>  
+<div style="padding-top: 20px;"></div>
+<div class="row">
+  <div class="col-sm-3"></div>
+      <div class="col-sm-6" style="display: flex;align-items: center;justify-content: center;">
+      <label id="status"></label></div>
+      <div class="col-sm-3"></div>
+        </div>
+<div style="display: flex;align-items: center;justify-content: center;">
+  <div id="data" style="display: none;padding: 10px;" class="border boder-info col-3">
+    <div>
+        <i id="iconstatus" class=""></i>         
+    <img src="" id="img" class="mx-auto d-block rounded-circle" style="height: 100px; width: 100px; position: relative; z-index: 2;"> 
+  </div>
+    Name: <label id="name"></label> <br>
+    Email: <label id="email"></label> <br>
+    First_name: <label id="fname"></label> <br>
+    Last_Name: <label id="lname"></label> <br>
+    Picture_url: <a href="" id="url" class="badge badge-info"> Click Here</a> <br>
+    Short_name: <label id="sname"></label> <br>
+    Name_format: <label id="nameformat"></label> <br>
+    <!-- <a id="signoutbtn" class="btn btn-danger text-white" onclick="logout();">LogOut</a> -->
+    <a id="signoutbtn" class="btn btn-danger text-white mx-auto d-block">LogOut</a>
+
+  </div>
+</div>
+  
+</div>
+
+
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+
+
+             $('#img').attr('src',profile.getImageUrl());
+        // document.getElementById('image').src=img;
+        document.getElementById('name').textContent=profile.getName();
+        document.getElementById('email').textContent=profile.getEmail();
+        document.getElementById('lname').textContent=profile.getFamilyName();
+        document.getElementById('fname').textContent= profile.getGivenName();
+        document.getElementById('status').className="alert alert-success";
+        document.getElementById('data').style.display = "block";
+        document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' +profile.getName() + '!';
+        document.getElementById('signoutbtn').onclick=function() {signOut();};
+        document.getElementById('iconstatus').className="fab fa-google";
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+    </script>
+
+    <script>
+    function clearData(){
+      $('#img').attr('src',"");
+        // document.getElementById('image').src=img;
+        document.getElementById('name').textContent="";
+        document.getElementById('sname').textContent="";
+        document.getElementById('email').textContent="";
+        document.getElementById('lname').textContent="";
+        document.getElementById('fname').textContent="";
+        document.getElementById('nameformat').textContent="";
+        $('#url').attr("href","");
+
+    }
+    
+    </script>
+
+<!-- <a href="#" class="btn btn-danger" onclick="signOut();">Sign out</a> -->
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+    document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+        document.getElementById('status').className="alert alert-warning";
+        document.getElementById('data').style.display = "none";
+        clearData();
+
+
+  }
+</script>
+ 
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="runtime.js"></script><script type="text/javascript" src="polyfills.js"></script><script type="text/javascript" src="styles.js"></script><script type="text/javascript" src="vendor.js"></script><script type="text/javascript" src="main.js"></script></body>
+</html>
